@@ -27,8 +27,7 @@ import platform.UIKit.UIResponderMeta
 import platform.UIKit.UIScreen
 import platform.UIKit.UIWindow
 
-fun main() {
-    val args = emptyArray<String>()
+fun main(args: Array<String>) {
     memScoped {
         val argc = args.size + 1
         val argv = (arrayOf("skikoApp") + args).map { it.cstr.ptr }.toCValues()
@@ -51,11 +50,12 @@ class SkikoAppDelegate : UIResponder, UIApplicationDelegateProtocol {
     }
 
     override fun application(application: UIApplication, didFinishLaunchingWithOptions: Map<Any?, *>?): Boolean {
-        window = UIWindow(frame = UIScreen.mainScreen.bounds)
-        window!!.rootViewController = Application("Counter") {
-            App()
+        window = UIWindow(frame = UIScreen.mainScreen.applicationFrame).apply {
+            rootViewController = Application("Counter") {
+                App()
+            }
+            makeKeyAndVisible()
         }
-        window!!.makeKeyAndVisible()
         return true
     }
 }

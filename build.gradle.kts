@@ -4,7 +4,7 @@ import org.jetbrains.compose.experimental.dsl.IOSDevices
 
 plugins {
     kotlin("multiplatform") version "1.6.21"
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev675"
+    id("org.jetbrains.compose") version "1.2.0-alpha01-dev716"
 }
 
 group = "com.yt8492"
@@ -43,6 +43,12 @@ kotlin {
             }
         }
     }
+
+    targets.withType<KotlinNativeTarget> {
+        binaries.all {
+            freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
@@ -55,18 +61,9 @@ compose.experimental {
         bundleIdPrefix = "com.yt8492"
         projectName = "Counter"
         deployConfigurations {
-            simulator("IPhone8") {
-                //Usage: ./gradlew iosDeployIPhone8Debug
-                device = IOSDevices.IPHONE_8
+            simulator("IPhone13") {
+                device = IOSDevices.IPHONE_13
             }
-        }
-    }
-}
-
-kotlin {
-    targets.withType<KotlinNativeTarget> {
-        binaries.all {
-            freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
         }
     }
 }
