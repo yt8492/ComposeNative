@@ -31,9 +31,22 @@ kotlin {
             }
         }
     }
+    iosArm64("uikitArm64") {
+        binaries {
+            executable() {
+                entryPoint = "main"
+                freeCompilerArgs += listOf(
+                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "CoreText",
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics"
+                )
+                freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
+            }
+        }
+    }
 
     sourceSets {
-        val uikitX64Main by getting {
+        val uikitMain by creating {
             dependencies {
                 implementation(kotlin("stdlib-common"))
                 implementation(compose.ui)
@@ -41,6 +54,12 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.runtime)
             }
+        }
+        val uikitX64Main by getting {
+            dependsOn(uikitMain)
+        }
+        val uikitArm64Main by getting {
+            dependsOn(uikitMain)
         }
     }
 
@@ -56,7 +75,6 @@ tasks.withType<KotlinCompile> {
 }
 
 compose.experimental {
-    web.application {}
     uikit.application {
         bundleIdPrefix = "com.yt8492"
         projectName = "Counter"
